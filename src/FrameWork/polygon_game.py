@@ -1,6 +1,11 @@
 #coding:utf-8
 import numpy as np
-
+n=0
+sum=0
+dp=[]
+edge=[]
+op=[]
+ans=[]
 def find(start,n,num):
     num+=4
     if dp[start][n][0]!='null':
@@ -52,38 +57,41 @@ def findpath(start,n,flag):
                 findpath(s1,n1,1)
                 findpath(s2,n2,1)
 
-#顶点和边都从0开始编号
-n=input("输入总顶点数->")
-sum=n
-#第一维代表的是有n个顶点，第二维代表的是链的长度，范围1-n，第三维的0代表最小值，1代表最大值
-dp=np.array([[['null']*2]*(n+1)]*n)#当前链的最大与最小值
-edge=np.array([[['null']*2]*(n+1)]*n)#含义是当前链最大与最小值所要删除的边号
-#边的符号
-op=np.array(['']*n)
-for i in range(n):
-    #每一个顶点，如果这条链只有它自己，那么最大最小都为它自己的顶点值
-    dp[i][1][0]=dp[i][1][1]=input("输入顶点值->")
-    op[i]=input("输入边符号->")
-#递归求解dp[0..n-1][n]
-for i in range(n):
-    dp[i][n][0],dp[i][n][1]=find(i,n,0)#相当于首先截掉了一条边，除0外op[i-1]，0是op[n-1]
-    
-result=[]
-for j in range(n):
-    result.append((int)(dp[j][n][1]))
-print '最优值为->',max(result)
-_index=result.index(max(result))
-###print _index
-ans=[]
-findpath(_index,n,1)
-ans.reverse()
-if _index==0:
-    #print '删除第',(n-1),'条边'
-    ans.insert(0,n-1)
-else:
-    #print '删除第',(_index-1),'条边'
-    ans.insert(0,_index-1)
-print '删除顺序为->',ans
+
+def dealBestPath(lines):
+    #顶点和边都从0开始编号
+    #n=input("输入总顶点数->")
+    n=len(lines)
+    sum=n
+    #第一维代表的是有n个顶点，第二维代表的是链的长度，范围1-n，第三维的0代表最小值，1代表最大值
+    dp=np.array([[['null']*2]*(n+1)]*n)#当前链的最大与最小值
+    edge=np.array([[['null']*2]*(n+1)]*n)#含义是当前链最大与最小值所要删除的边号
+    #边的符号
+    op=np.array(['']*n)
+    for i in range(n):
+        #每一个顶点，如果这条链只有它自己，那么最大最小都为它自己的顶点值
+        dp[i][1][0]=dp[i][1][1]=lines[i].getNode1().getNum();
+        op[i]=lines[i].getOpr()
+    #递归求解dp[0..n-1][n]
+    for i in range(n):
+        dp[i][n][0],dp[i][n][1]=find(i,n,0)#相当于首先截掉了一条边，除0外op[i-1]，0是op[n-1]
+
+    result=[]
+    for j in range(n):
+        result.append((int)(dp[j][n][1]))
+    print '最优值为->',max(result)
+    _index=result.index(max(result))
+    ###print _index
+    ans=[]
+    findpath(_index,n,1)
+    ans.reverse()
+    if _index==0:
+        #print '删除第',(n-1),'条边'
+        ans.insert(0,n-1)
+    else:
+        #print '删除第',(_index-1),'条边'
+        ans.insert(0,_index-1)
+    print '删除顺序为->',ans
 
 
 
